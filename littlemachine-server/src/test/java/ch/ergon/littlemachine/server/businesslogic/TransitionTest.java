@@ -20,11 +20,11 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(Theories.class)
 public class TransitionTest {
 
-	public static final int RUN_LENGTH = 1000;
+	public static final int RUN_LENGTH = 2000;
 	public static final Random RANDOM = new Random();
 
 	@Theory
-	public void randomTransitions(@ForAll(sampleSize = 100) @InRange(minInt = 1, maxInt = 10) int nOfPos) {
+	public void randomTransitions(@ForAll(sampleSize = 1000) @InRange(minInt = 1, maxInt = 10) int nOfPos) {
 		Map<UUID, PositionState> positions = new HashMap<>(nOfPos);
 		UUID[] uuids = new UUID[nOfPos];
 		for (int i = 0; i < uuids.length; i++) {
