@@ -34,7 +34,7 @@ public class TransitionTest {
 		int i = 0;
 		for (; i < RUN_LENGTH; i++) {
 			UUID position = uuids[RANDOM.nextInt(nOfPos)];
-			MachineState currentState = getCurrentState(positions, position);
+			MachineState currentState = BusinessLogicProcessor.getCurrentState(positions, position);
 			MachineTransition transition = randomTransition();
 			TransitionProcedure proc = t.nextTransition(currentState, transition);
 			proc.transition(positions, position, RANDOM.nextLong());
@@ -43,10 +43,7 @@ public class TransitionTest {
 		assertThat(i, is(equalTo(RUN_LENGTH)));
 	}
 
-	private static MachineState getCurrentState(Map<UUID, PositionState> positions, UUID position) {
-		PositionState state = positions.get(positions);
-		return state == null ? MachineState.NULL : state.state;
-	}
+
 
 	private static MachineTransition randomTransition() {
 		MachineTransition[] values = MachineTransition.values();
