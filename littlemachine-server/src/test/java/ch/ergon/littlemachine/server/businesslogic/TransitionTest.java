@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import com.pholser.junit.quickcheck.ForAll;
 import com.pholser.junit.quickcheck.generator.InRange;
 
-import static org.junit.Assume.assumeThat;
+import static org.junit.Assert.assertThat;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +40,7 @@ public class TransitionTest {
 			proc.transition(positions, position, RANDOM.nextLong());
 		}
 
-		assumeThat(i, is(equalTo(RUN_LENGTH)));
+		assertThat(i, is(equalTo(RUN_LENGTH)));
 	}
 
 	private static MachineState getCurrentState(Map<UUID, PositionState> positions, UUID position) {
