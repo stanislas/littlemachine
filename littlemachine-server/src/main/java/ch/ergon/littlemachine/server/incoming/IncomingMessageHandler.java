@@ -1,23 +1,7 @@
 package ch.ergon.littlemachine.server.incoming;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelInboundHandler;
 
-public class IncomingMessageHandler extends ChannelInboundHandlerAdapter {
-
-	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		byte[] message = (byte[]) msg;
-		// request a slot on the disrputor and publish the byte message event.
-		// 
-		ctx.flush();
-	}
-	
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
-			throws Exception {
-		cause.printStackTrace();
-		ctx.close();
-	}
-
+public interface IncomingMessageHandler extends ChannelInboundHandler {
+	// Marker Interface
 }

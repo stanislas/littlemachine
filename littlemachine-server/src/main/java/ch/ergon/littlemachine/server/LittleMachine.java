@@ -8,10 +8,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import ch.ergon.littlemachine.server.businesslogic.BusinessLogicService;
+import ch.ergon.littlemachine.server.incoming.DefaultIncomingMessageHandler;
 import ch.ergon.littlemachine.server.incoming.IncomingMessageDecoder;
-import ch.ergon.littlemachine.server.incoming.IncomingMessageHandler;
 
 import com.google.common.base.Strings;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class LittleMachine {
 
@@ -24,6 +27,10 @@ public class LittleMachine {
 	}
 
 	public void run() throws Exception {
+		Injector injector = Guice.createInjector(new LittleMachineModule());
+		final BusinessLogicService businessLogicService = injector.getInstance(BusinessLogicService.class);
+		businessLogicService.start();
+
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 		try {
@@ -32,13 +39,15 @@ public class LittleMachine {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						protected void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new IncomingMessageDecoder(), new IncomingMessageHandler());
+							ch.pipeline().addLast(new IncomingMessageDecoder(),
+									new DefaultIncomingMessageHandler(businessLogicService));
 						}
 					}).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
 			ChannelFuture f = b.bind(port).sync();
 
 			f.channel().closeFuture().sync();
 		} finally {
+			businessLogicService.stop();
 			workerGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
 		}

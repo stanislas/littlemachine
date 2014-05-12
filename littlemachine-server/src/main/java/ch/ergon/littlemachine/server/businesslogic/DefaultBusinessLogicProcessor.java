@@ -20,16 +20,12 @@ public class DefaultBusinessLogicProcessor implements BusinessLogicProcessor {
 	}
 
 	@Override
-	public void processMessage(Message m) {
+	public void onEvent(Message m, long sequence, boolean endOfBatch) throws Exception {
 		MachineState state = getCurrentState(positions, m.position);
 		TransitionProcedure proc = transitionTable.nextTransition(state, m.transition);
-		try {
-			boolean successful = proc.transition(positions, m.position, m.value);
-			if (!successful) {
-				// Log back.
-			}
-		} catch (Exception e) {
-			// Catastrophy!! is the state still consistent? (no way to know)
+		boolean successful = proc.transition(positions, m.position, m.value);
+		if (!successful) {
+			// Log back.
 		}
 	}
 
@@ -37,4 +33,5 @@ public class DefaultBusinessLogicProcessor implements BusinessLogicProcessor {
 		PositionState state = positions.get(positions);
 		return state == null ? MachineState.NULL : state.state;
 	}
+
 }

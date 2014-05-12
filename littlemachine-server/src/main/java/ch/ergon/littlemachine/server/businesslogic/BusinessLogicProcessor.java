@@ -2,8 +2,8 @@ package ch.ergon.littlemachine.server.businesslogic;
 
 import ch.ergon.littlemachine.server.message.Message;
 
-public interface BusinessLogicProcessor {
+import com.lmax.disruptor.EventHandler;
 
-	public abstract void processMessage(Message m);
+public interface BusinessLogicProcessor extends EventHandler<Message> {
 
 }

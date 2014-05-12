@@ -24,7 +24,9 @@ public class LittleClient {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new FressianClientHandler());
+                    ch.pipeline().addLast(
+                    		new MessageEncoder(),
+                    		new FressianClientHandler());
                 }
             });
 

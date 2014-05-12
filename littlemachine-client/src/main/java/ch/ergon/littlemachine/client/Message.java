@@ -1,4 +1,4 @@
-package ch.ergon.littlemachine.server.message;
+package ch.ergon.littlemachine.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,18 +8,7 @@ import java.util.UUID;
 import org.fressian.FressianReader;
 import org.fressian.FressianWriter;
 
-import ch.ergon.littlemachine.server.businesslogic.MachineTransition;
-
-import com.lmax.disruptor.EventFactory;
-
 public class Message {
-
-	public final static EventFactory<Message> MESSAGE_FACTORY = new EventFactory<Message>() {
-		@Override
-		public Message newInstance() {
-			return new Message();
-		}
-	};
 
 	public byte[] rawMessage;
 	public UUID position;
