@@ -7,7 +7,9 @@ public class IncomingMessageHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		ctx.write(msg);
+		byte[] message = (byte[]) msg;
+		// request a slot on the disrputor and publish the byte message event.
+		// 
 		ctx.flush();
 	}
 	

@@ -1,5 +1,9 @@
 package ch.ergon.littlemachine.server.message;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
@@ -15,12 +19,6 @@ import org.junit.runner.RunWith;
 import ch.ergon.littlemachine.server.businesslogic.MachineTransition;
 
 import com.pholser.junit.quickcheck.ForAll;
-import com.pholser.junit.quickcheck.generator.InRange;
-
-import static org.junit.Assert.assertThat;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(Theories.class)
 public class MessageTest {
@@ -38,18 +36,6 @@ public class MessageTest {
 		Reader r = new FressianReader(bais);
 		Message m2 = Message.read(r);
 		assertThat(m2, is(equalTo(m)));
-	}
-
-	@Theory
-	public void encodeSize(@ForAll(sampleSize = 100) MachineTransition transition,
-			@ForAll(sampleSize = 100) @InRange(minLong = 1, maxLong = 1000) long value) throws Exception {
-		Message m = new Message(UUID.randomUUID(), transition, value);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		Writer w = new FressianWriter(baos);
-		Message.write(m, w);
-		byte[] byteArray = baos.toByteArray();
-		System.out.println(bytesToHex(byteArray));
-		assertThat(byteArray.length, is(equalTo(MESSAGE_LENGTH)));
 	}
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();

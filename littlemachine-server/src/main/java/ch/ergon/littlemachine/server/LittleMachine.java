@@ -8,7 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import ch.ergon.littlemachine.server.incoming.TimeServerHandler;
+import ch.ergon.littlemachine.server.incoming.IncomingMessageDecoder;
+import ch.ergon.littlemachine.server.incoming.IncomingMessageHandler;
 
 import com.google.common.base.Strings;
 
@@ -27,18 +28,15 @@ public class LittleMachine {
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 		try {
 			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup)
-					.channel(NioServerSocketChannel.class)
+			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
-						protected void initChannel(SocketChannel ch)
-								throws Exception {
-							ch.pipeline().addLast(new TimeServerHandler());
+						protected void initChannel(SocketChannel ch) throws Exception {
+							ch.pipeline().addLast(new IncomingMessageDecoder(), new IncomingMessageHandler());
 						}
-					}).option(ChannelOption.SO_BACKLOG, 128)
-					.childOption(ChannelOption.SO_KEEPALIVE, true);
+					}).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
 			ChannelFuture f = b.bind(port).sync();
-			
+
 			f.channel().closeFuture().sync();
 		} finally {
 			workerGroup.shutdownGracefully();
