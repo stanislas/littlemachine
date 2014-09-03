@@ -15,6 +15,7 @@ import ch.ergon.littlemachine.server.incoming.IncomingMessageDecoder;
 import com.google.common.base.Strings;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import net.matlux.NreplServer;
 
 public class LittleMachine {
 
@@ -26,8 +27,7 @@ public class LittleMachine {
 		this.port = port;
 	}
 
-	public void run() throws Exception {
-		Injector injector = Guice.createInjector(new LittleMachineModule());
+	public void run(Injector injector) throws Exception {
 		final BusinessLogicService businessLogicService = injector.getInstance(BusinessLogicService.class);
 		businessLogicService.start();
 
@@ -59,9 +59,12 @@ public class LittleMachine {
 		if (Strings.isNullOrEmpty(portEnv)) {
 			port = 8080;
 		} else {
-			port = Integer.parseInt(args[0]);
+			port = Integer.parseInt(portEnv);
 		}
-		new LittleMachine(port).run();
+        Injector injector = Guice.createInjector(new LittleMachineModule());
+        NreplServer nreplServer = new NreplServer(8081);
+        nreplServer.put("injector", injector);
+        new LittleMachine(port).run(injector);
 	}
 
 }
