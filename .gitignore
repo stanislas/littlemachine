@@ -28,3 +28,5 @@ release.properties
 .idea/libraries/Maven__org_clojure_clojure_1_6_0.xml
 .idea/libraries/Maven__org_clojure_tools_nrepl_0_2_3.xml
 .idea/libraries/Maven__org_tukaani_xz_1_0.xml
+.idea/replstate.xml
+.idea/libraries

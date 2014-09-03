@@ -29,7 +29,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: ognl:ognl:3.0.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javassist:javassist:3.11.0.GA" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.pholser:junit-quickcheck-generators:0.3" level="project" />
-    <orderEntry type="library" name="Maven: com.lmax:disruptor:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: com.lmax:disruptor:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: net.matlux:jvm-breakglass:0.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.clojure:clojure:1.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.clojure:tools.nrepl:0.2.3" level="project" />
