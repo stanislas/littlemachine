@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import ch.ergon.littlemachine.server.message.Message;
 
 import com.google.inject.Inject;
+import com.lmax.disruptor.InsufficientCapacityException;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
@@ -16,7 +17,7 @@ public class DefaultBusinessLogicService implements BusinessLogicService {
 	private final ExecutorService threadPool;
 	private final Disruptor<Message> disruptor;
 	private RingBuffer<Message> ringBuffer;
-	
+
 
 	@SuppressWarnings("unchecked")
 	@Inject
@@ -27,18 +28,17 @@ public class DefaultBusinessLogicService implements BusinessLogicService {
 		MessageDecodingHandler messageDecodingHandler = new MessageDecodingHandler();
 		disruptor.handleEventsWith(messageDecodingHandler, messagePersistanceHandler);
 		disruptor.after(
-				messagePersistanceHandler, 
-				messageDecodingHandler).handleEventsWith(
-				businessLogicProcessor);
+			messagePersistanceHandler,
+			messageDecodingHandler).handleEventsWith(
+			businessLogicProcessor);
 	}
 
 	@Override
-	public boolean publishEvent(byte[] event) {
-		long next = ringBuffer.next();
+	public void publishEvent(byte[] event) throws InsufficientCapacityException {
+		long next = ringBuffer.tryNext();
 		try {
 			Message message = ringBuffer.get(next);
 			message.rawMessage = event;
-			return true;
 		} finally {
 			ringBuffer.publish(next);
 		}

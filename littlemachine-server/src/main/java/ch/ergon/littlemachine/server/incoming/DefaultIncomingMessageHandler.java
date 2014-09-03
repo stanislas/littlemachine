@@ -1,5 +1,6 @@
 package ch.ergon.littlemachine.server.incoming;
 
+import com.lmax.disruptor.InsufficientCapacityException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import ch.ergon.littlemachine.server.businesslogic.BusinessLogicService;
@@ -16,7 +17,7 @@ public class DefaultIncomingMessageHandler extends ChannelInboundHandlerAdapter 
 	}
 	
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws InsufficientCapacityException {
 		byte[] message = (byte[]) msg;
 		businessLogicService.publishEvent(message);
 		ctx.flush();
