@@ -13,9 +13,9 @@ public class LittleMachineModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(BusinessLogicProcessor.class).to(DefaultBusinessLogicProcessor.class);
-		bind(TransitionTable.class).to(DefaultTransitionTable.class);
-		bind(BusinessLogicService.class).to(DefaultBusinessLogicService.class);
+		bind(BusinessLogicProcessor.class).to(DefaultBusinessLogicProcessor.class).asEagerSingleton();
+		bind(TransitionTable.class).to(DefaultTransitionTable.class).asEagerSingleton();
+		bind(BusinessLogicService.class).to(DefaultBusinessLogicService.class).asEagerSingleton();
 	}
 
 }
