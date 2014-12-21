@@ -1,16 +1,15 @@
 package ch.ergon.littlemachine.server.message;
 
+import ch.ergon.littlemachine.server.businesslogic.MachineTransition;
+import com.cognitect.transit.Reader;
+import com.cognitect.transit.TransitFactory;
+import com.cognitect.transit.Writer;
+import com.lmax.disruptor.EventFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
-import org.fressian.FressianReader;
-import org.fressian.FressianWriter;
-
-import ch.ergon.littlemachine.server.businesslogic.MachineTransition;
-
-import com.lmax.disruptor.EventFactory;
 
 public class Message {
 
@@ -68,20 +67,20 @@ public class Message {
 	}
 	
 	public void decode() throws IOException {
-		try (ByteArrayInputStream bais = new ByteArrayInputStream(rawMessage);
-				FressianReader reader = new FressianReader(bais)) {
-			position = (UUID) reader.readObject();
-			transition = MachineTransition.values()[(int) reader.readInt()];
-			value = reader.readInt();
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(rawMessage)) {
+			Reader reader = TransitFactory.reader(TransitFactory.Format.MSGPACK, bais);
+			position = reader.read();
+			transition = MachineTransition.values()[((Long)reader.read()).intValue()];
+			value = reader.read();
 		}
 	}
 	
 	public void encode() throws IOException {
-		try(ByteArrayOutputStream baos = new ByteArrayOutputStream(30);
-				FressianWriter writer = new FressianWriter(baos)) {
-			writer.writeObject(position);
-			writer.writeInt(transition.ordinal());
-			writer.writeInt(value);
+		try(ByteArrayOutputStream baos = new ByteArrayOutputStream(30)) {
+			Writer writer = TransitFactory.writer(TransitFactory.Format.MSGPACK, baos);
+			writer.write(position);
+			writer.write(transition.ordinal());
+			writer.write(value);
 			rawMessage = baos.toByteArray();
 		}
 	}

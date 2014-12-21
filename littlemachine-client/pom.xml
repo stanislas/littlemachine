@@ -15,11 +15,11 @@
 			<artifactId>guava</artifactId>
 			<version>17.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.fressian</groupId>
-			<artifactId>fressian</artifactId>
-			<version>0.6.5</version>
-		</dependency>
+        <dependency>
+            <groupId>com.cognitect</groupId>
+            <artifactId>transit-java</artifactId>
+            <version>0.8.269</version>
+        </dependency>
 	</dependencies>
 	<name>LittleMachine Client</name>
 </project>
